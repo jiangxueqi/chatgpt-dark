@@ -5,5 +5,5 @@ yarn-error.log
 .vercel
 .DS_Store
 src/temp.ts
-# dist
+dist
 sftp-config.json
