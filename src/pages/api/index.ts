@@ -13,8 +13,15 @@ import { SocksProxyAgent } from "socks-proxy-agent"
 
 const tokenizer = new GPT3Tokenizer.default({ type: 'gpt3' }) //如果这里报错是因为你node版本和我不一样 这句话改成 const tokenizer = new GPT3Tokenizer({ type: 'gpt3' })
 
-export const localKey =
-  import.meta.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY || ""
+// export const localKey =
+//   import.meta.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY || ""
+
+
+const envOpenAiApiKeys = import.meta.env.OPENAI_API_KEY.split("|")
+
+function getRandomenvOpenAiApiKey() {
+  return envOpenAiApiKeys[Math.floor(Math.random() * envOpenAiApiKeys.length)];
+}
 
 export const baseURL = process.env.VERCEL
   ? "api.openai.com"
@@ -31,6 +38,7 @@ const maxTokens = Number(
 const pwd = import.meta.env.PASSWORD || process.env.PASSWORD
 
 export const post: APIRoute = async context => {
+  const localKey = getRandomenvOpenAiApiKey()
   try {
     const body = await context.request.json()
     const {
@@ -88,7 +96,7 @@ export const post: APIRoute = async context => {
     
     const proxy = import.meta.env.SOCKS_PROXY || process.env.SOCKS_PROXY
     
-    var completion
+    var completion: any
     
     if (proxy && proxy?.length && proxy.length > 4) {
       completion = await fetch(`https://${baseURL}/v1/chat/completions`, {
