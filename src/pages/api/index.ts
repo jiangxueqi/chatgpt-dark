@@ -17,7 +17,11 @@ const tokenizer = new GPT3Tokenizer.default({ type: 'gpt3' }) //如果这里报�
 //   import.meta.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY || ""
 
 
-const envOpenAiApiKeys = import.meta.env.OPENAI_API_KEY.split("|")
+function formatEnvOpenAiApiKeys() {
+  const arry_temp = import.meta.env.OPENAI_API_KEY.split("|")
+  return  arry_temp.map((item: string) => item.replace(/\n/g, ''))    // 去除换行符
+}
+const envOpenAiApiKeys = formatEnvOpenAiApiKeys()
 
 function getRandomenvOpenAiApiKey() {
   return envOpenAiApiKeys[Math.floor(Math.random() * envOpenAiApiKeys.length)];
