@@ -76,7 +76,7 @@ export default (props: Props) => {
       }}
     >
       <div
-        class={`shrink-0 w-7 h-7 mt-4 rounded-full ${
+        class={`shrink-0 w-6 h-6 mt-4 rounded-full ${
           roleClass[props.role]
         }`}
       ></div>
