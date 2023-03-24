@@ -24,8 +24,8 @@ export default (props: Props) => {
   useCopyCode()
   const roleClass = {
     system: "bg-white",
-    user: "",
-    assistant: "bg-white"
+    user: "bg-blue",
+    assistant: "bg-green"
   }
 
   const md = MarkdownIt({
