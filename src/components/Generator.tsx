@@ -99,7 +99,7 @@ export default function (props: {
       } else
         setMessageList([
           {
-            role: "assistant",
+            role: "system",
             content: defaultMessage
           }
         ])
@@ -125,7 +125,7 @@ export default function (props: {
       if (messageList().length === 0) {
         setMessageList([
           {
-            role: "assistant",
+            role: "system",
             content: defaultMessage
           }
         ])
