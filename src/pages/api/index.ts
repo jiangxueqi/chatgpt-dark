@@ -5,17 +5,15 @@ import {
   ReconnectInterval
 } from "eventsource-parser"
 import type { ChatMessage } from "~/types"
-import GPT3Tokenizer from 'gpt3-tokenizer'
+// import GPT3Tokenizer from 'gpt3-tokenizer'
+import { encode } from 'gpt-tokenizer'
 import { getAll } from "@vercel/edge-config"
 import { splitKeys, randomWithWeight, randomKey } from "~/utils"
 import fetch from 'node-fetch'
 import { SocksProxyAgent } from "socks-proxy-agent"
 
 // const tokenizer = new GPT3Tokenizer({ type: 'gpt3' })            // 使用pnpm在本地调式使用
-const tokenizer = new GPT3Tokenizer.default({ type: 'gpt3' })    // 使用pnpm run build打包时候使用
-
-// export const localKey =
-//   import.meta.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY || ""
+// const tokenizer = new GPT3Tokenizer.default({ type: 'gpt3' })    // 使用pnpm run build打包时候使用
 
 
 function formatEnvOpenAiApiKeys() {
@@ -83,7 +81,8 @@ export const post: APIRoute = async context => {
       return new Response("没有填写 OpenAI API key，或者 key 填写错误。")
 
     const tokens = messages.reduce((acc, cur) => {
-      const tokens = tokenizer.encode(cur.content).bpe.length
+      // const tokens = tokenizer.encode(cur.content).bpe.length     // gpt-3-turbo的方式
+      const tokens = encode(cur.content)
       return acc + tokens
       // return 0
     }, 0)
