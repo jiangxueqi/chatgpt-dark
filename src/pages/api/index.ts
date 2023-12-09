@@ -5,15 +5,15 @@ import {
   ReconnectInterval
 } from "eventsource-parser"
 import type { ChatMessage } from "~/types"
-// import GPT3Tokenizer from 'gpt3-tokenizer'
-import { encode } from 'gpt-tokenizer'
+import GPT3Tokenizer from 'gpt3-tokenizer'                           // 使用gpt-3计算tokens
+// import { encode } from 'gpt-tokenizer'                            // 使用gpt-4计算tokens
 import { getAll } from "@vercel/edge-config"
 import { splitKeys, randomWithWeight, randomKey } from "~/utils"
 import fetch from 'node-fetch'
 import { SocksProxyAgent } from "socks-proxy-agent"
 
-// const tokenizer = new GPT3Tokenizer({ type: 'gpt3' })            // 使用pnpm在本地调式使用
-// const tokenizer = new GPT3Tokenizer.default({ type: 'gpt3' })    // 使用pnpm run build打包时候使用
+// const tokenizer = new GPT3Tokenizer({ type: 'gpt3' })            // 使用pnpm dev在本地调式使用
+const tokenizer = new GPT3Tokenizer.default({ type: 'gpt3' })    // 使用pnpm run build打包时候使用
 
 
 function formatEnvOpenAiApiKeys() {
@@ -81,8 +81,8 @@ export const post: APIRoute = async context => {
       return new Response("没有填写 OpenAI API key，或者 key 填写错误。")
 
     const tokens = messages.reduce((acc, cur) => {
-      // const tokens = tokenizer.encode(cur.content).bpe.length     // gpt-3-turbo的方式
-      const tokens = encode(cur.content)
+      const tokens = tokenizer.encode(cur.content).bpe.length              // gpt-3-turbo的方式
+      // const tokens = encode(cur.content)                                // gpt-4的方式                    
       return acc + tokens
       // return 0
     }, 0)
@@ -111,7 +111,7 @@ export const post: APIRoute = async context => {
         },
         method: "POST",
         body: JSON.stringify({
-          model: "gpt-4",
+          model: "gpt-3.5-turbo",  // gpt-4-1106-preview
           messages,
           temperature,
           // max_tokens: 4096 - tokens,
@@ -126,7 +126,7 @@ export const post: APIRoute = async context => {
         },
         method: "POST",
         body: JSON.stringify({
-          model: "gpt-4",
+          model: "gpt-3.5-turbo",  // gpt-4-1106-preview
           messages,
           temperature,
           // max_tokens: 4096 - tokens,
